@@ -12,7 +12,8 @@ namespace dynet {
 
 // computes a representation of a word by reading characters
 // one at a time
-struct C2WBuilder {
+struct C2WBuilder 
+{
   LSTMBuilder fc2w;
   LSTMBuilder rc2w;
   LookupParameter p_lookup;
@@ -23,17 +24,21 @@ struct C2WBuilder {
                       unsigned layers,
                       unsigned input_dim,
                       unsigned hidden_dim,
-                      ParameterCollection& m) :
-      p_lookup(m->add_lookup_parameters(vocab_size, {input_dim})) {
+                      ParameterCollection& m) 
+    : p_lookup(m->add_lookup_parameters(vocab_size, {input_dim})) 
+  {
     local_model = m.add_subcollection("--c2w-builder");
     fc2w = LSTMBuilder(layers, input_dim, hidden_dim, local_model);
     rc2w = LSTMBuilder(layers, input_dim, hidden_dim, local_model);
   }
-  void new_graph(ComputationGraph* cg) {
+
+  void new_graph(ComputationGraph* cg) 
+  {
     words.clear();
     fc2w.new_graph(cg);
     rc2w.new_graph(cg);
   }
+
   // compute a composed representation of a word out of characters
   // wordid should be a unique index for each word *type* in the graph being built
   VariableIndex add_word(int word_id, const std::vector<int>& chars, ComputationGraph* cg) {

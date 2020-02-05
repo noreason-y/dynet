@@ -5,7 +5,8 @@
 
 using namespace dynet;
 
-void* InternalMemoryPool::allocate(size_t n) {
+void* InternalMemoryPool::allocate(size_t n) 
+{
   auto rounded_n = a->round_up_align(n);
   if (rounded_n + used > capacity) {
     return 0;

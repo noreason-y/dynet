@@ -14,7 +14,8 @@ using namespace std;
 
 namespace dynet {
 
-DeviceMempoolSizes::DeviceMempoolSizes(size_t total_size) {
+DeviceMempoolSizes::DeviceMempoolSizes(size_t total_size) 
+{
   DYNET_ARG_CHECK(total_size > 0, "Attempt to allocate memory of size 0 in DeviceMempoolSizes");
   if (total_size < 4) {
     used[0] = used[1] = used[2] = used[3] = 1;
@@ -26,14 +27,16 @@ DeviceMempoolSizes::DeviceMempoolSizes(size_t total_size) {
   }
 }
 
-DeviceMempoolSizes::DeviceMempoolSizes(size_t fx_s, size_t dEdfs_s, size_t ps_s, size_t sc_s) {
+DeviceMempoolSizes::DeviceMempoolSizes(size_t fx_s, size_t dEdfs_s, size_t ps_s, size_t sc_s) 
+{
   used[0] = fx_s;
   used[1] = dEdfs_s;
   used[2] = ps_s;
   used[3] = sc_s;
 }
 
-DeviceMempoolSizes::DeviceMempoolSizes(const std::string & descriptor) {
+DeviceMempoolSizes::DeviceMempoolSizes(const std::string & descriptor) 
+{
   vector<string> strs = str_split(descriptor, ',');
   if (strs.size() == 1) {
     size_t total_size = stoi(strs[0]);

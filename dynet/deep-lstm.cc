@@ -12,13 +12,17 @@ namespace dynet {
 
 enum { X2I, H2I, C2I, BI, X2O, H2O, C2O, BO, X2C, H2C, BC };
 
-DeepLSTMBuilder::DeepLSTMBuilder(unsigned layers,
-                         unsigned input_dim,
-                         unsigned hidden_dim,
-                         ParameterCollection& model) : layers(layers) {
+DeepLSTMBuilder::DeepLSTMBuilder(
+    unsigned layers, 
+    unsigned input_dim, 
+    unsigned hidden_dim, 
+    ParameterCollection& model) 
+    : layers(layers) 
+{
   unsigned layer_input_dim = input_dim;
   local_model = model.add_subcollection("deep-lstm-builder");
-  for (unsigned i = 0; i < layers; ++i) {
+  for (unsigned i = 0; i < layers; ++i) 
+  {
     // i
     Parameter p_x2i = local_model.add_parameters({hidden_dim, layer_input_dim});
     Parameter p_h2i = local_model.add_parameters({hidden_dim, hidden_dim});
@@ -43,10 +47,12 @@ DeepLSTMBuilder::DeepLSTMBuilder(unsigned layers,
   }  // layers
 }
 
-void DeepLSTMBuilder::new_graph_impl(ComputationGraph& cg, bool update){
+void DeepLSTMBuilder::new_graph_impl(ComputationGraph& cg, bool update)
+{
   param_vars.clear();
 
-  for (unsigned i = 0; i < layers; ++i){
+  for (unsigned i = 0; i < layers; ++i)
+  {
     auto& p = params[i];
 
     //i

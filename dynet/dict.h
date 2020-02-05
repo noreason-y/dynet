@@ -11,15 +11,16 @@
 
 namespace dynet {
 
-class Dict {
-typedef std::unordered_map<std::string, int> Map;
-public:
-  Dict() : frozen(false), map_unk(false), unk_id(-1) {
-  }
+class Dict 
+{
+ typedef std::unordered_map<std::string, int> Map;
+ public:
+  Dict() : frozen(false), map_unk(false), unk_id(-1) {}
 
   inline unsigned size() const { return (unsigned)words_.size(); }
 
-  inline bool contains(const std::string& words) const {
+  inline bool contains(const std::string& words) const 
+  {
     return !(d_.find(words) == d_.end());
   }
 
@@ -28,8 +29,10 @@ public:
 
   inline int convert(const std::string& word) {
     auto i = d_.find(word);
-    if (i == d_.end()) {
-      if (frozen) {
+    if (i == d_.end()) 
+    {
+      if (frozen) 
+      {
         if (map_unk)
           return unk_id;
         else
@@ -43,9 +46,10 @@ public:
   }
   
   inline const std::string& convert(const int& id) const {
-    DYNET_ARG_CHECK(id < (int)words_.size(), 
-                            "Out-of-bounds error in Dict::convert for word ID " << id <<
-                            " (dict size: " << words_.size() << ")");
+    DYNET_ARG_CHECK(
+        id < (int)words_.size(), "Out-of-bounds error in Dict::convert for word ID " 
+        << id << " (dict size: " << words_.size() << ")");
+
     return words_[id];
   }
   
@@ -68,7 +72,7 @@ public:
   
   void clear() { words_.clear(); d_.clear(); }
 
-protected:
+ protected:
   bool frozen;
   bool map_unk; // if true, map unknown word to unk_id
   int unk_id; 

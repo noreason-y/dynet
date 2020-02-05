@@ -27,6 +27,7 @@ class Device {
   Device(const Device&) = delete;
   Device& operator=(const Device&) = delete;
   virtual ~Device();
+
  public:
   void reset_rng(unsigned seed) {};
   int device_id;
@@ -43,7 +44,8 @@ class Device {
 };
 
 #if HAVE_CUDA
-class Device_GPU : public Device {
+class Device_GPU : public Device 
+{
  public:
   typedef Eigen::CudaStreamDevice EigenDevice;
   explicit Device_GPU(int my_id, const DeviceMempoolSizes & mb, int device_id, unsigned seed);
@@ -51,9 +53,11 @@ class Device_GPU : public Device {
   void reset_rng(unsigned seed);
   int cuda_device_id;
   cublasHandle_t cublas_handle;
-#if HAVE_CUDNN
-  cudnnHandle_t cudnnHandle;
-#endif
+  
+  #if HAVE_CUDNN
+    cudnnHandle_t cudnnHandle;
+  #endif
+
   Eigen::GpuDevice* edevice;
   Eigen::CudaStreamDevice* estream;
   GPUAllocator gpu_mem;
@@ -61,7 +65,8 @@ class Device_GPU : public Device {
 };
 #endif
 
-class Device_CPU : public Device {
+class Device_CPU : public Device 
+{
  public:
   typedef Eigen::DefaultDevice EigenDevice;
   explicit Device_CPU(int my_id, const DeviceMempoolSizes & mb, bool shared);
@@ -71,7 +76,8 @@ class Device_CPU : public Device {
   MemAllocator* shmem;
 };
 
-class DeviceManager final {
+class DeviceManager final 
+{
  public:
   DeviceManager();
   ~DeviceManager();
@@ -89,8 +95,8 @@ class DeviceManager final {
   Device* get_global_device(const std::string & name);
 
   // no copying allowed
-  DeviceManager(const DeviceManager &) = delete;
-  void operator=(const DeviceManager &) = delete;
+  DeviceManager(const DeviceManager&) = delete;
+  void operator=(const DeviceManager&) = delete;
 
  private:
   std::vector<Device*> devices;
@@ -99,12 +105,14 @@ class DeviceManager final {
 
 DeviceManager* get_device_manager();
 
-inline void show_pool_mem_info() {
+inline void show_pool_mem_info() 
+{
   DeviceManager* device_manager = get_device_manager();
   auto devs = device_manager->get_devices();
   if (devs.size() == 0) return;
   std::cerr << "\nMemory pool info for each devices:\n";
-  for (Device* dev : devs) {
+  for (Device* dev : devs) 
+  {
     std::cerr << " Device " << dev->name << " - FOR Memory " << (dev->pools[0]->get_cap() >> 20)
         << "MB, BACK Memory " << (dev->pools[1]->get_cap() >> 20)
         << "MB, PARAM Memory " << (dev->pools[2]->get_cap() >> 20)

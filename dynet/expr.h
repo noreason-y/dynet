@@ -30,7 +30,8 @@ namespace dynet {
  * \brief Expressions are the building block of a Dynet computation graph
  * \details [long description]
  */
-struct Expression {
+struct Expression 
+{
   ComputationGraph *pg;
   VariableIndex i;
   unsigned graph_id;
@@ -44,12 +45,13 @@ struct Expression {
    * \param pg Pointer to the computation graph
    * \param i Variable index
    */
-  Expression(ComputationGraph *pg, VariableIndex i) : pg(pg),
-    i(i), graph_id(pg->get_id()) {}
+  Expression(ComputationGraph *pg, VariableIndex i) 
+  : pg(pg), i(i), graph_id(pg->get_id()) {}
 
   std::string get_device_name() const;
 
-  const bool is_stale() const {
+  const bool is_stale() const 
+  {
     return (get_number_of_active_graphs() != 1 || graph_id != get_current_graph_id());
   }
 
@@ -58,8 +60,10 @@ struct Expression {
    * \details Throws a runtime_error exception if no computation graph is available
    * \return Value of the expression as a tensor
    */
-  const Tensor& value() const {
-    if (this->is_stale()) {
+  const Tensor& value() const 
+  {
+    if (this->is_stale()) 
+    {
       throw std::runtime_error("Attempt to use a stale expression.");
     }
     return pg->get_value(i);
@@ -70,12 +74,16 @@ struct Expression {
    *
    * Make sure to call `backward` on a downstream expression before calling this.
    *
-   * If the expression is a constant expression (meaning it's not a function of a parameter), dynet won't compute it's gradient for the sake of efficiency. You need to manually force the gradient computation by adding the agument `full=true` to `backward`
+   * If the expression is a constant expression (meaning it's not a function of a parameter), 
+   * dynet won't compute it's gradient for the sake of efficiency. 
+   * You need to manually force the gradient computation by adding the agument `full=true` to `backward`
 
    * \return Value of the expression as a tensor
    */
-  const Tensor& gradient() const {
-    if (this->is_stale()) {
+  const Tensor& gradient() const 
+  {
+    if (this->is_stale()) 
+    {
       throw std::runtime_error("Attempt to use a stale expression.");
     }
     return pg->get_gradient(i);
@@ -85,8 +93,10 @@ struct Expression {
    * \details Throws a runtime_error exception if no computation graph is available
    * \return Dimension of the expression
    */
-  const Dim& dim() const {
-    if (this->is_stale()) {
+  const Dim& dim() const 
+  {
+    if (this->is_stale()) 
+    {
       throw std::runtime_error("Attempt to use a stale expression.");
     }
     return pg->get_dimension(i);

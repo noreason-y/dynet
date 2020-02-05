@@ -9,7 +9,8 @@ namespace dynet {
 
 using std::vector;
 
-std::string Expression::get_device_name() const {
+std::string Expression::get_device_name() const 
+{
   if (pg->nodes[i]->device == nullptr)
     throw std::runtime_error("Unknown device for node:" + std::to_string(i));
   return pg->nodes[i]->device->name;
@@ -20,13 +21,17 @@ Expression input(ComputationGraph& g, const real *ps, Device *device) { return E
 Expression input(ComputationGraph& g, const Dim& d, const vector<float>& data, Device *device) { return Expression(&g, g.add_input(d, data, device)); }
 Expression input(ComputationGraph& g, const Dim& d, const vector<float>* pdata, Device *device) { return Expression(&g, g.add_input(d, pdata, device)); }
 Expression input(ComputationGraph& g, const Dim& d, const vector<unsigned int>& ids, const vector<float>& data, float defdata, Device *device) { return Expression(&g, g.add_input(d, ids, data, device, defdata)); }
-Expression one_hot(ComputationGraph& g, unsigned int d, unsigned int idx, Device *device) {
+
+Expression one_hot(ComputationGraph& g, unsigned int d, unsigned int idx, Device *device) 
+{
   Dim dim({d});
   vector<unsigned int> ids = {idx};
   vector<float> data = {1.0};
   return Expression(&g, g.add_input(dim, ids, data, device, 0.0));
 }
-Expression one_hot(ComputationGraph& g, unsigned int d, const std::vector<unsigned int>& ids, Device *device) {
+
+Expression one_hot(ComputationGraph& g, unsigned int d, const std::vector<unsigned int>& ids, Device *device) 
+{
   unsigned batch_size = ids.size();
   Dim dim({d}, batch_size);
   vector<unsigned int> flat_ids(batch_size);
@@ -35,23 +40,33 @@ Expression one_hot(ComputationGraph& g, unsigned int d, const std::vector<unsign
   vector<float> data(batch_size, 1.0);
   return Expression(&g, g.add_input(dim, flat_ids, data, device, 0.0));
 }
+
 Expression const_parameter(ComputationGraph& g, Parameter p) { return Expression(&g, g.add_const_parameters(p)); }
 Expression const_parameter(ComputationGraph& g, LookupParameter p) { return Expression(&g, g.add_const_parameters(p)); }
+
 Expression parameter(ComputationGraph& g, Parameter p) { return Expression(&g, g.add_parameters(p)); }
 Expression parameter(ComputationGraph& g, LookupParameter p) { return Expression(&g, g.add_parameters(p)); }
+
 Expression lookup(ComputationGraph& g, LookupParameter p, unsigned index) { return Expression(&g, g.add_lookup(p, index)); }
 Expression lookup(ComputationGraph& g, LookupParameter p, const unsigned* pindex) { return Expression(&g, g.add_lookup(p, pindex)); }
 Expression lookup(ComputationGraph& g, LookupParameter p, const vector<unsigned>& indices) { return Expression(&g, g.add_lookup(p, indices)); }
 Expression lookup(ComputationGraph& g, LookupParameter p, const vector<unsigned>* pindices) { return Expression(&g, g.add_lookup(p, pindices)); }
+
 Expression const_lookup(ComputationGraph& g, LookupParameter p, unsigned index) { return Expression(&g, g.add_const_lookup(p, index)); }
 Expression const_lookup(ComputationGraph& g, LookupParameter p, const unsigned* pindex) { return Expression(&g, g.add_const_lookup(p, pindex)); }
 Expression const_lookup(ComputationGraph& g, LookupParameter p, const vector<unsigned>& indices) { return Expression(&g, g.add_const_lookup(p, indices)); }
 Expression const_lookup(ComputationGraph& g, LookupParameter p, const vector<unsigned>* pindices) { return Expression(&g, g.add_const_lookup(p, pindices)); }
+
 Expression zeros(ComputationGraph& g, const Dim& d, Device *device) { return Expression(&g, g.add_function<Constant>(device, d, 0.f)); }
 // Expression zeroes(ComputationGraph& g, const Dim& d) {return zeros(g, d);}
 Expression ones(ComputationGraph& g, const Dim& d, Device *device) { return Expression(&g, g.add_function<Constant>(device, d, 1.f)); }
 Expression constant(ComputationGraph& g, const Dim& d, float val, Device *device) { return Expression(&g, g.add_function<Constant>(device, d, val)); }
-Expression random_normal(ComputationGraph& g, const Dim& d, float mean, float stddev, Device *device) { return Expression(&g, g.add_function<RandomNormal>(device, d, mean, stddev)); }
+
+Expression random_normal(ComputationGraph& g, const Dim& d, float mean, float stddev, Device *device) 
+{ 
+  return Expression(&g, g.add_function<RandomNormal>(device, d, mean, stddev)); 
+}
+
 Expression random_bernoulli(ComputationGraph& g, const Dim& d, real p, real scale, Device *device) { return Expression(&g, g.add_function<RandomBernoulli>(device, {}, d, p, scale)); }
 Expression random_uniform(ComputationGraph& g, const Dim& d, real left, real right, Device *device) { return Expression(&g, g.add_function<RandomUniform>(device, {}, d, left, right)); }
 Expression random_gumbel(ComputationGraph& g, const Dim& d, real mu, real beta, Device *device) { return Expression(&g, g.add_function<RandomGumbel>(device, {}, d, mu, beta)); }

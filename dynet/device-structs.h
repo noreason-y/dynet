@@ -17,7 +17,8 @@ enum class DeviceMempool {FXS = 0, DEDFS = 1, PS = 2, SCS = 3, NONE = 4};
 struct ComputationGraph; // TODO is there a nicer way to resolve this cyclic dependency?
 struct Tensor;
 
-struct DeviceMempoolSizes {
+struct DeviceMempoolSizes 
+{
   size_t used[4];
   DeviceMempoolSizes() = default;
   DeviceMempoolSizes(size_t total_s);

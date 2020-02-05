@@ -16,47 +16,52 @@ using namespace std;
 
 namespace dynet {
 
-ExecutionEngine::ExecutionEngine(const ComputationGraph& cg)
-    : device_manager(get_device_manager()), cg(cg), backward_computed(0) {}
+ExecutionEngine::ExecutionEngine(const ComputationGraph& cg) : 
+    device_manager(get_device_manager()), cg(cg), backward_computed(0) {}
 
 ExecutionEngine::~ExecutionEngine() {}
 
-vector<const Tensor*> ExecutionEngine::forward(
-    const std::vector<VariableIndex>& node_list) {
+vector<const Tensor*> ExecutionEngine::forward(const std::vector<VariableIndex>& node_list) 
+{
   invalidate();
-  VariableIndex max_node =
-      *std::max_element(node_list.begin(), node_list.end());
+  VariableIndex max_node = *std::max_element(node_list.begin(), node_list.end());
   incremental_forward(max_node);
   vector<const Tensor*> ret(node_list.size());
-  for (unsigned i = 0; i < ret.size(); ++i) {
+  for (unsigned i = 0; i < ret.size(); ++i) 
+  {
     ret[i] = &(get_value(node_list[i]));
   }
   return ret;
 }
 
-void SimpleExecutionEngine::invalidate() {
+void SimpleExecutionEngine::invalidate() 
+{
   num_nodes_evaluated = 0;
   backward_computed = 0;
 }
 
-void SimpleExecutionEngine::invalidate(unsigned i) {
+void SimpleExecutionEngine::invalidate(unsigned i) 
+{
   num_nodes_evaluated = i;
 }
 
-const Tensor& SimpleExecutionEngine::forward() {
+const Tensor& SimpleExecutionEngine::forward() 
+j{
   const VariableIndex node_max_index = (VariableIndex)(cg.nodes.size() - 1);
   return forward(node_max_index);
 }
 
-const Tensor& SimpleExecutionEngine::forward(VariableIndex i) {
+const Tensor& SimpleExecutionEngine::forward(VariableIndex i) 
+{
   invalidate();
   return incremental_forward(i);
 }
 
-const Tensor& SimpleExecutionEngine::get_value(VariableIndex i) {
-  DYNET_ASSERT(i < cg.nodes.size(),
-      "Out-of-bounds variable access in SimpleExecutionEngine::get_value()");
-  if (i >= num_nodes_evaluated) {
+const Tensor& SimpleExecutionEngine::get_value(VariableIndex i) 
+{
+  DYNET_ASSERT(i < cg.nodes.size(), "Out-of-bounds variable access in SimpleExecutionEngine::get_value()");
+  if (i >= num_nodes_evaluated) 
+  {
     incremental_forward(i);
   }
   return nfxs[i];

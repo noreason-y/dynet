@@ -1,20 +1,25 @@
 #ifndef DYNET_CUDNN_OPS_H
 #define DYNET_CUDNN_OPS_H
 
+// C: switched back later
 #if HAVE_CUDNN
+// #if 1 // C: temp change for viewing
+
 #include "dynet/dynet.h"
 #include "dynet/cuda.h"
 
 namespace dynet {
 
-class CudnnConvOp {
+class CudnnConvOp 
+{
  public:
   explicit CudnnConvOp() {}
   explicit CudnnConvOp(const std::vector<unsigned>& s, const bool padding_type);
   ~CudnnConvOp() noexcept(false);
   /* call this function before using the CudnnConvOp */
-  void forward_impl(const Device_GPU & dev,
-                    const std::vector<const Tensor*>& xs, Tensor& fx);
+  void forward_impl(const Device_GPU & dev, 
+                    const std::vector<const Tensor*>& xs, 
+                    Tensor& fx);
   void backward_impl(const Device_GPU & dev,
                const std::vector<const Tensor*>& xs,
                const Tensor& fx,
@@ -46,21 +51,29 @@ class CudnnConvOp {
 };
 
 
-class CudnnMaxPooling2DOp {
+class CudnnMaxPooling2DOp 
+{
  public: 
   explicit CudnnMaxPooling2DOp() {}
-  explicit CudnnMaxPooling2DOp(const std::vector<unsigned>& ksize,
-                               const std::vector<unsigned>& stride,
+  explicit CudnnMaxPooling2DOp(
+      const std::vector<unsigned>& ksize,
+      const std::vector<unsigned>& stride,
                                const bool padding_type);
+
   ~CudnnMaxPooling2DOp() noexcept(false);
-  void forward_impl(const Device_GPU & dev,
-                    const std::vector<const Tensor*>& xs, Tensor& fx);
-  void backward_impl(const Device_GPU & dev,
-                const std::vector<const Tensor*>& xs,
-                const Tensor& fx,
-                const Tensor& dEdf,
-                unsigned i,
-                Tensor& dEdxi);
+
+  void forward_impl(
+      const Device_GPU & dev,
+      const std::vector<const Tensor*>& xs, 
+      Tensor& fx);
+
+  void backward_impl(
+      const Device_GPU & dev,
+      const std::vector<const Tensor*>& xs,
+      const Tensor& fx,
+      const Tensor& dEdf,
+      unsigned i,
+      Tensor& dEdxi);
 
  protected:
   std::vector<int> ksize_;

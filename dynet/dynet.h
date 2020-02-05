@@ -56,13 +56,15 @@ struct Expression;
 
 typedef unsigned VariableIndex;
 
-struct CGCheckpoint {
+struct CGCheckpoint 
+{
   int node_idx;
   int par_node_idx;
   DeviceMempoolSizes device_mem_checkpoint;
 };
 
-inline void swap(VariableIndex& i1, VariableIndex& i2) {
+inline void swap(VariableIndex& i1, VariableIndex& i2) 
+{
   VariableIndex t = i1;
   i1 = i2;
   i2 = t;
@@ -81,7 +83,8 @@ inline void swap(VariableIndex& i1, VariableIndex& i2) {
  * ComputationGraph except for `backward` since most of them are available
  * directly from the Expression class.
  */
-struct ComputationGraph {
+struct ComputationGraph 
+{
   /**
    * \brief Default constructor
    */
@@ -100,6 +103,7 @@ struct ComputationGraph {
    * \return The index of the created variable
    */
   VariableIndex add_input(real s, Device* device);  //
+
   /**
    * \brief Add scalar input by pointer
    * \details The computational network will pull inputs in from the user's data
@@ -109,8 +113,8 @@ struct ComputationGraph {
    * \param device The device to place input value
    * \return The index of the created variable
    */
-  VariableIndex add_input(const real* ps,
-                          Device* device);  // add pointer to scalar
+  VariableIndex add_input(const real* ps, Device* device);  // add pointer to scalar
+
   /**
    * \brief Add multidimentsional input
    * \details The computational network will pull inputs in from the user's data
@@ -122,8 +126,8 @@ struct ComputationGraph {
    * \param device The device to place input value
    * \return The index of the created variable
    */
-  VariableIndex add_input(const Dim& d, const std::vector<float>& data,
-                          Device* device);
+  VariableIndex add_input(const Dim& d, const std::vector<float>& data, Device* device);
+
   /**
    * \brief Add multidimentsional input by pointer
    * \details The computational network will pull inputs in from the user's data
@@ -134,8 +138,8 @@ struct ComputationGraph {
    * \param device The device to place input value
    * \return The index of the created variable
    */
-  VariableIndex add_input(const Dim& d, const std::vector<float>* pdata,
-                          Device* device);
+  VariableIndex add_input(const Dim& d, const std::vector<float>* pdata, Device* device);
+
   /**
    * \brief Add sparse input
    * \details The computational network will pull inputs in from the user's data
@@ -150,14 +154,15 @@ struct ComputationGraph {
    * \param defdata The default data with which to set the unspecified data
    * points \return The index of the created variable
    */
-  VariableIndex add_input(const Dim& d, const std::vector<unsigned int>& ids,
-                          const std::vector<float>& data, Device* device,
-                          float defdata = 0.f);
-
+  VariableIndex add_input(
+      const Dim& d, const std::vector<unsigned int>& ids, 
+      const std::vector<float>& data, Device* device, 
+      float defdata = 0.f);
   // PARAMETERS
   // parameters are things that are optimized. in contrast to a system like
   // Torch where computational modules may have their own parameters, in DYNET
   // parameters are just parameters
+
   /**
    * \brief Add a parameter to the computation graph
    *
@@ -165,6 +170,7 @@ struct ComputationGraph {
    * \return The index of the created variable
    */
   VariableIndex add_parameters(Parameter p);
+
   /**
    * \brief Add a full matrix of lookup parameters to the computation graph
    *
@@ -172,6 +178,7 @@ struct ComputationGraph {
    * \return The index of the created variable
    */
   VariableIndex add_parameters(LookupParameter p);
+
   /**
    * \brief Add a parameter to the computation graph (but don't update)
    *
@@ -179,6 +186,7 @@ struct ComputationGraph {
    * \return The index of the created variable
    */
   VariableIndex add_const_parameters(Parameter p);
+
   /**
    * \brief Add a full matrix of lookup parameter to the computation graph (but
    * don't update)
@@ -189,6 +197,7 @@ struct ComputationGraph {
   VariableIndex add_const_parameters(LookupParameter p);
   // use pindex to point to a memory location where the index will live
   // that the caller owns
+
   /**
    * \brief Add a lookup parameter to the computation graph
    * \details Use pindex to point to a memory location where the index will live
@@ -200,6 +209,7 @@ struct ComputationGraph {
    * \return The index of the created variable
    */
   VariableIndex add_lookup(LookupParameter p, const unsigned* pindex);
+
   /**
    * \brief Add a lookup parameter to the computation graph
    *
@@ -209,6 +219,7 @@ struct ComputationGraph {
    * \return The index of the created variable
    */
   VariableIndex add_lookup(LookupParameter p, unsigned index);
+
   /**
    * \brief Add lookup parameters to the computation graph
    * \details Use pindices to point to a memory location where the indices will
@@ -219,8 +230,8 @@ struct ComputationGraph {
    *
    * \return The index of the created variable
    */
-  VariableIndex add_lookup(LookupParameter p,
-                           const std::vector<unsigned>* pindices);
+  VariableIndex add_lookup(LookupParameter p, const std::vector<unsigned>* pindices);
+
   /**
    * \brief Add lookup parameters to the computation graph
    *
@@ -229,9 +240,8 @@ struct ComputationGraph {
    *
    * \return The index of the created variable
    */
-  VariableIndex add_lookup(LookupParameter p,
-                           const std::vector<unsigned>& indices);
-  //
+  VariableIndex add_lookup(LookupParameter p, const std::vector<unsigned>& indices);
+
   /**
    * \brief Add a lookup parameter to the computation graph
    * \details Just like add_lookup, but don't optimize the lookup parameters
@@ -242,6 +252,7 @@ struct ComputationGraph {
    * \return The index of the created variable
    */
   VariableIndex add_const_lookup(LookupParameter p, const unsigned* pindex);
+
   /**
    * \brief Add a lookup parameter to the computation graph
    * \details Just like add_lookup, but don't optimize the lookup parameters
@@ -252,6 +263,7 @@ struct ComputationGraph {
    * \return The index of the created variable
    */
   VariableIndex add_const_lookup(LookupParameter p, unsigned index);
+
   /**
    * \brief Add lookup parameters to the computation graph
    * \details Just like add_lookup, but don't optimize the lookup parameters
@@ -261,8 +273,8 @@ struct ComputationGraph {
    *
    * \return The index of the created variable
    */
-  VariableIndex add_const_lookup(LookupParameter p,
-                                 const std::vector<unsigned>* pindices);
+  VariableIndex add_const_lookup(LookupParameter p, const std::vector<unsigned>* pindices);
+
   /**
    * \brief Add lookup parameters to the computation graph
    * \details Just like add_lookup, but don't optimize the lookup parameters
@@ -272,8 +284,7 @@ struct ComputationGraph {
    *
    * \return The index of the created variable
    */
-  VariableIndex add_const_lookup(LookupParameter p,
-                                 const std::vector<unsigned>& indices);
+  VariableIndex add_const_lookup(LookupParameter p, const std::vector<unsigned>& indices);
 
   // COMPUTATIONS
   /**
@@ -285,11 +296,11 @@ struct ComputationGraph {
    * \return The index of the output variable
    */
   template <class Function>
-  inline VariableIndex add_function(
-      const std::initializer_list<VariableIndex>& arguments);
+  inline VariableIndex add_function( const std::initializer_list<VariableIndex>& arguments);
+
   template <class Function>
-  inline VariableIndex add_function(Device *device,
-	  const std::initializer_list<VariableIndex>& arguments);
+  inline VariableIndex add_function(Device *device, const std::initializer_list<VariableIndex>& arguments);
+
   /**
    * \brief Add a function to the computation graph (with side information)
    * \details This what is called when creating an expression
@@ -300,23 +311,26 @@ struct ComputationGraph {
    * output variable
    */
   template <class Function, typename... Args>
-  inline VariableIndex add_function(
-      const std::initializer_list<VariableIndex>& arguments,
+  inline VariableIndex add_function( 
+      const std::initializer_list<VariableIndex>& arguments, 
       Args&&... side_information);
+
   template <class Function, typename... Args>
-  inline VariableIndex add_function(Device *device,
-	  const std::initializer_list<VariableIndex>& arguments,
-	  Args&&... side_information);
+  inline VariableIndex add_function(
+      Device *device, 
+      const std::initializer_list<VariableIndex>& arguments, Args&&... side_information);
+
   template <class Function, typename T>
   inline VariableIndex add_function(const T& arguments);
+
   template <class Function, typename T>
   inline VariableIndex add_function(Device *device, const T& arguments);
+
   template <class Function, typename T, typename... Args>
-  inline VariableIndex add_function(const T& arguments,
-                                    Args&&... side_information);
+  inline VariableIndex add_function(const T& arguments, Args&&... side_information);
+
   template <class Function, typename T, typename... Args>
-  inline VariableIndex add_function(Device *device, const T& arguments,
-									Args&&... side_information);
+  inline VariableIndex add_function(Device *device, const T& arguments, Args&&... side_information);
 
   // reset ComputationGraph to a newly created state
   /**
@@ -324,10 +338,12 @@ struct ComputationGraph {
    * \details [long description]
    */
   void clear();
+
   /**
    * \brief Set a checkpoint
    */
   void checkpoint();
+
   /**
    * \brief Revert to last checkpoint
    */
@@ -353,6 +369,7 @@ struct ComputationGraph {
    * \return Value of the `last` Expression after execution
    */
   const Tensor& forward(const Expression& last);
+
   /**
    * \brief Run complete forward pass from first node to given one, ignoring all
    * precomputed values.
@@ -361,6 +378,7 @@ struct ComputationGraph {
    * computed \return Value of the end Node after execution
    */
   const Tensor& forward(VariableIndex i);
+
   /**
    * \brief Run forward pass from the last computed node to given one.
    * \details Useful if you want to add nodes and evaluate just the new parts.
@@ -369,6 +387,7 @@ struct ComputationGraph {
    * \return Value of the `last` Expression after execution
    */
   const Tensor& incremental_forward(const Expression& last);
+
   /**
    * \brief Run forward pass from the last computed node to given one.
    * \details Useful if you want to add nodes and evaluate just the new parts.
@@ -377,6 +396,7 @@ struct ComputationGraph {
    * computed \return Value of the end Node after execution
    */
   const Tensor& incremental_forward(VariableIndex i);
+
   /**
    * \brief Get forward value for node at index i.
    * \details Performs forward evaluation if note available (may compute more
@@ -386,6 +406,7 @@ struct ComputationGraph {
    * \return Requested value
    */
   const Tensor& get_value(VariableIndex i);
+
   /**
    * \brief Get forward value for the given expression
    * \details Performs forward evaluation if note available (may compute more
@@ -405,6 +426,7 @@ struct ComputationGraph {
    * \return Requested gradient
    */
   const Tensor& get_gradient(VariableIndex i);
+
   /**
    * \brief Get forward gradient for the given expression
    * \details Performs backward pass if not available (may compute more than
@@ -414,10 +436,12 @@ struct ComputationGraph {
    * \return Requested gradient
    */
   const Tensor& get_gradient(const Expression& e);
+
   /**
    * \brief Clears forward caches (for get_value etc).
    */
   void invalidate();
+
   /**
    * \brief Computes backward gradients from the front-most evaluated node.
    *
@@ -441,6 +465,7 @@ struct ComputationGraph {
    * constant nodes).
    */
   void backward(const Expression& last, bool full = false);
+
   /**
    * \brief Computes backward gradients from node i (assuming it already been
    * evaluated).
@@ -468,8 +493,10 @@ struct ComputationGraph {
    * for efficiency.
    */
   void backward(VariableIndex i, bool full = false);
+
   // set immediate_compute variable
   void set_immediate_compute(bool ic);
+
   // set check_validity variable
   void set_check_validity(bool cv);
 
@@ -491,17 +518,19 @@ struct ComputationGraph {
   std::vector<VariableIndex> parameter_nodes;  // nodes that contain parameters
                                                // that can be updated (subset of
                                                // nodes)
-
   std::unique_ptr<ExecutionEngine> ee;  // handles the execution
 
  private:
   unsigned graph_id;
+
   // flag of whether to compute immediately for each expression, i.e., an
   // imperative execution style to help debug.
   bool immediate_compute;
+
   // flag of checking Inf/NaN of each layer. Only performing checking when
   // immediate_compute is also set to true.
   bool check_validity;
+
   VariableIndex add_function_node(Node *node, Device *device = nullptr);
   void set_dim_for_new_node(const VariableIndex& i);
 
@@ -523,7 +552,8 @@ struct ComputationGraph {
  * An operation on expressions can then be created from the new Node, see
  * expr.h/expr.cc for examples
  */
-struct Node {
+struct Node 
+{
   virtual ~Node();
 
   /**
@@ -544,7 +574,8 @@ struct Node {
    * \return String description of the node
    */
   virtual std::string as_string(const std::vector<std::string>& args) const = 0;
-  virtual std::string as_dummy_string() const {
+  virtual std::string as_dummy_string() const 
+  {
     std::vector<std::string> a;
     a.resize(args.size(), "a");
     return as_string(a);
@@ -586,19 +617,17 @@ struct Node {
    *
    * Note on debugging problems with differentiable components
    *
-   * - fx is uninitialized when forward is called- are you relying on it being
-   * 0?
+   * - fx is uninitialized when forward is called- are you relying on it being 0?
    *
    * \param xs Pointers to the inputs
-   * \param fx pointer to the (preallocated) location for the result of forward
-   * to be stored
+   * \param fx pointer to the (preallocated) location for the result of forward to be stored
    */
-  virtual void forward_impl(const std::vector<const Tensor*>& xs,
-                            Tensor& fx) const = 0;
+  virtual void forward_impl(const std::vector<const Tensor*>& xs, Tensor& fx) const = 0;
+
   //
   /**
-   * \brief Accumulates the derivative of E with respect to the ith argument to
-   * f, that is, xs[i] \details This function contains the logic for the
+   * \brief Accumulates the derivative of E with respect to the ith argument to f, that is, xs[i]
+   * \details This function contains the logic for the
    * backward pass. Some implementation remarks from nodes.cc:
    * 1. dEdxi MUST **ACCUMULATE** a result since multiple calls to forward may
    * depend on the same x_i. Even, e.g., Identity must be implemented as dEdx1
@@ -621,8 +650,11 @@ struct Node {
    * \param i Index of the input w.r.t which we take the derivative
    * \param dEdxi Gradient of the objective w.r.t the input of the node
    */
-  virtual void backward_impl(const std::vector<const Tensor*>& xs,
-                             const Tensor& fx, const Tensor& dEdf, unsigned i,
+  virtual void backward_impl(
+      const std::vector<const Tensor*>& xs,
+                             const Tensor& fx, 
+                             const Tensor& dEdf, 
+                             unsigned i,
                              Tensor& dEdxi) const = 0;
 
   /**
@@ -649,8 +681,8 @@ struct Node {
    * \param fx pointer to the (preallocated) location for the result of forward
    * to be stored
    */
-  virtual void forward(const std::vector<const Tensor*>& xs,
-                       Tensor& fx) const final;
+  virtual void forward(const std::vector<const Tensor*>& xs, Tensor& fx) const final;
+
   /**
    * \brief perform the backward passes in one or multiple calls
    *
@@ -660,27 +692,26 @@ struct Node {
    * \param i Index of the input w.r.t which we take the derivative
    * \param dEdxi Gradient of the objective w.r.t the input of the node
    */
-  virtual void backward(const std::vector<const Tensor*>& xs, const Tensor& fx,
-                        const Tensor& dEdf, unsigned i,
-                        Tensor& dEdxi) const final;
+  virtual void backward(
+      const std::vector<const Tensor*>& xs, 
+      const Tensor& fx, 
+      const Tensor& dEdf, unsigned i, 
+      Tensor& dEdxi) const final;
 
   /**
    * \brief signature for automatic batching
-   * \detail This will be equal only for nodes that can be combined. Returns
-   *         0 for unbatchable functions.
+   * \detail This will be equal only for nodes that can be combined. Returns 0 for unbatchable functions.
    */
-  virtual int autobatch_sig(const ComputationGraph& cg, SigMap& sm) const {
-    return 0;
-  }
+  virtual int autobatch_sig(const ComputationGraph& cg, SigMap& sm) const { return 0; }
+
   /**
    * \brief which inputs can be batched
    * \detail This will be true for inputs that should be concatenated when
    *         autobatching, and false for inputs that should be shared among
    *         all batches.
    */
-  virtual std::vector<int> autobatch_concat(const ComputationGraph& cg) const {
-    return std::vector<int>();
-  }
+  virtual std::vector<int> autobatch_concat(const ComputationGraph& cg) const { return std::vector<int>(); }
+
   /**
    * \brief create a pseudonode for autobatching
    * \detail This will combine together multiple nodes into one big node for
@@ -688,13 +719,12 @@ struct Node {
    *         one component of the mini-batch can be used as-is it is OK to just
    *         return the null pointer, otherwise we should make the appropriate
    *         changes and return a new node.
-   *
    */
   virtual Node* autobatch_pseudo_node(
-      const ComputationGraph& cg,
-      const std::vector<VariableIndex>& batch_ids) const {
-    return nullptr;
-  }
+      const ComputationGraph& cg, 
+      const std::vector<VariableIndex>& batch_ids) const 
+  { return nullptr; }
+
   /**
    * \brief reshape the tensors for auto
    * \detail Takes in info, and reshapes the dimensions of xs (for which
@@ -702,22 +732,26 @@ struct Node {
    *         is OK for componentwise operations.
    *
    */
-  virtual void autobatch_reshape(const ComputationGraph& cg,
-                                 const std::vector<VariableIndex>& batch_ids,
-                                 const std::vector<int>& concat,
-                                 std::vector<const Tensor*>& xs,
-                                 Tensor& fx) const {}
+  virtual void autobatch_reshape(
+      const ComputationGraph& cg, 
+      const std::vector<VariableIndex>& batch_ids, 
+      const std::vector<int>& concat, 
+      std::vector<const Tensor*>& xs, 
+      Tensor& fx) const 
+ {}
+
   /**
    * \brief reshape the tensors for auto
    * \detail Takes in info, and reshapes the dimensions of xs (for which
    *         "concat" is true) and fx by concatenating their batches.
    *
    */
-  void autobatch_reshape_concatonly(const ComputationGraph& cg,
-                                    const std::vector<VariableIndex>& batch_ids,
-                                    const std::vector<int>& concat,
-                                    std::vector<const Tensor*>& xs,
-                                    Tensor& fx) const;
+  void autobatch_reshape_concatonly(
+      const ComputationGraph& cg, 
+      const std::vector<VariableIndex>& batch_ids, 
+      const std::vector<int>& concat, 
+      std::vector<const Tensor*>& xs, 
+      Tensor& fx) const;
 
   //
   /**
@@ -728,7 +762,8 @@ struct Node {
 
   inline void set_cg(ComputationGraph* cg) { cg_ = cg; }
 
-  inline ComputationGraph* get_cg() const {
+  inline ComputationGraph* get_cg() const 
+  {
     if (cg_)
       return cg_;
     else
@@ -738,8 +773,7 @@ struct Node {
   std::vector<VariableIndex> args; /**< Dependency structure */
 
   // memory size
-  Dim dim; /**< Will be .size() = 0 initially filled in by forward() -- TODO fix
-              this */
+  Dim dim; /**< Will be .size() = 0 initially filled in by forward() -- TODO fix this */
 
   // pointer to the node, or nullptr to inherit device from first input, or
   // default when there is no input
@@ -774,16 +808,19 @@ struct Node {
                             number of bytes you need from aux_storage_size().
                             Note: this memory will be on the CPU or GPU,
                             depending on your computation backend*/
+
   bool has_cuda_implemented = true;
 };
+
 template <class Function>
-inline VariableIndex ComputationGraph::add_function(
-	const std::initializer_list<VariableIndex>& arguments) {
+inline VariableIndex ComputationGraph::add_function( const std::initializer_list<VariableIndex>& arguments) 
+{
 	return add_function_node(new Function(arguments));
 }
+
 template <class Function>
-inline VariableIndex ComputationGraph::add_function(Device *device,
-    const std::initializer_list<VariableIndex>& arguments) {
+inline VariableIndex ComputationGraph::add_function(Device* device, const std::initializer_list<VariableIndex>& arguments) 
+{
   return add_function_node(new Function(arguments), device);
 }
 
@@ -791,43 +828,50 @@ inline VariableIndex ComputationGraph::add_function(Device *device,
 // nondifferentiable arguments
 template <class Function, typename... Args>
 inline VariableIndex ComputationGraph::add_function(
-    const std::initializer_list<VariableIndex>& arguments,
-    Args&&... side_information) {
-	return add_function_node(
-		new Function(arguments, std::forward<Args>(side_information)...));
+    const std::initializer_list<VariableIndex>& arguments, 
+    Args&&... side_information) 
+{
+	return add_function_node(new Function(arguments, std::forward<Args>(side_information)...));
 }
+
 template <class Function, typename... Args>
-inline VariableIndex ComputationGraph::add_function(Device *device,
-	const std::initializer_list<VariableIndex>& arguments,
-	Args&&... side_information) {
-	return add_function_node(
-		new Function(arguments, std::forward<Args>(side_information)...), device);
+inline VariableIndex ComputationGraph::add_function(
+    Device* device, 
+    const std::initializer_list<VariableIndex>& arguments, 
+    Args&&... side_information) 
+{
+	return add_function_node(new Function(arguments, std::forward<Args>(side_information)...), device);
 }
 
 template <class Function, typename T>
-inline VariableIndex ComputationGraph::add_function(const T& arguments) {
+inline VariableIndex ComputationGraph::add_function(const T& arguments) 
+{
   return add_function_node(new Function(arguments));
 }
+
 template <class Function, typename T>
-inline VariableIndex ComputationGraph::add_function(Device *device, const T& arguments) {
+inline VariableIndex ComputationGraph::add_function(Device* device, const T& arguments) 
+{
 	return add_function_node(new Function(arguments), device);
 }
 
 // pass side information to the function. these are likely to be
 // nondifferentiable arguments
 template <class Function, typename T, typename... Args>
-inline VariableIndex ComputationGraph::add_function(
-    const T& arguments, Args&&... side_information) {
-	return add_function_node(
-		new Function(arguments, std::forward<Args>(side_information)...));
+inline VariableIndex ComputationGraph::add_function(const T& arguments, Args&&... side_information) 
+{
+	return add_function_node(new Function(arguments, std::forward<Args>(side_information)...));
 }
+
 // pass side information to the function. these are likely to be
 // nondifferentiable arguments
 template <class Function, typename T, typename... Args>
-inline VariableIndex ComputationGraph::add_function(Device *device,
-	const T& arguments, Args&&... side_information) {
-	return add_function_node(
-		new Function(arguments, std::forward<Args>(side_information)...), device);
+inline VariableIndex ComputationGraph::add_function(
+    Device *device, 
+    const T& arguments, 
+    Args&&... side_information) 
+{
+	return add_function_node(new Function(arguments, std::forward<Args>(side_information)...), device);
 }
 
 }  // namespace dynet

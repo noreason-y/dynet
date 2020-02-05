@@ -31,7 +31,8 @@ namespace dynet {
  * \brief The Dim struct stores information about the dimensionality of expressions.
  * \details Batch dimension is treated separately from standard dimension.
  */
-struct Dim {
+struct Dim 
+{
   /**
    * \brief Default constructor
    */
@@ -46,7 +47,8 @@ struct Dim {
    *
    * \param x List of dimensions
    */
-  Dim(std::initializer_list<unsigned int> x) : nd(0), bd(1) {
+  Dim(std::initializer_list<unsigned int> x) : nd(0), bd(1) 
+  {
     DYNET_ARG_CHECK(
         x.size() <= DYNET_MAX_TENSOR_DIM,
         "Out of bounds exception in Dim::Dim() with initializer_list of size "
@@ -59,7 +61,8 @@ struct Dim {
    * \param x  List of dimensions
    * \param b Batch size
    */
-  Dim(std::initializer_list<unsigned int> x, unsigned int b) : nd(0), bd(b) {
+  Dim(std::initializer_list<unsigned int> x, unsigned int b) : nd(0), bd(b) 
+  {
     DYNET_ARG_CHECK(
         x.size() <= DYNET_MAX_TENSOR_DIM,
         "Out of bounds exception in Dim::Dim() with initializer_list of size "
@@ -72,7 +75,8 @@ struct Dim {
    *
    * \param x Array of dimensions
    */
-  Dim(const std::vector<long> & x) : nd(0), bd(1) {
+  Dim(const std::vector<long>& x) : nd(0), bd(1) 
+  {
     DYNET_ARG_CHECK(
         x.size() <= DYNET_MAX_TENSOR_DIM,
         "Out of bounds exception in Dim::Dim() with vector of size "
@@ -85,7 +89,8 @@ struct Dim {
      * \param x Vector of dimensions
      * \param b Batch size
      */
-  Dim(const std::vector<long> & x, unsigned int b) : nd(0), bd(b) {
+  Dim(const std::vector<long> & x, unsigned int b) : nd(0), bd(b) 
+  {
     DYNET_ARG_CHECK(
         x.size() <= DYNET_MAX_TENSOR_DIM,
         "Out of bounds exception in Dim::Dim() with vector of size "
@@ -122,7 +127,8 @@ struct Dim {
    * \details iterate all the dimensions of Dim, stop at last dimension of 1
    * \return truncated dimension
    */
-  inline Dim truncate() const {
+  inline Dim truncate() const 
+  {
     Dim r = *this;
     unsigned int m = nd;
     while (m > 1 && size(m-1) == 1) --m;
@@ -133,7 +139,8 @@ struct Dim {
    * \brief Set the batch dimension to 1
    * \return 1-batch version of this instance
    */
-  inline Dim single_batch() const {
+  inline Dim single_batch() const 
+  {
     Dim r = *this;
     r.bd = 1;
     return r;
@@ -143,7 +150,8 @@ struct Dim {
    *
    * \param int New number of dimensions
    */
-  inline void resize(unsigned int i) {
+  inline void resize(unsigned int i) 
+  {
     while(nd < i)
       d[nd++] = 1;
     nd = i;
@@ -162,7 +170,8 @@ struct Dim {
    * \brief Number of non-one dimensions
    * \return Number of non-one dimensions
    */
-  inline unsigned int num_nonone_dims() const {
+  inline unsigned int num_nonone_dims() const 
+  {
     int ret = 0;
     for(size_t i = 0; i < nd; ++i)
       if(d[i] != 1)
@@ -186,7 +195,8 @@ struct Dim {
    * \param i Dimension index
    * \param s Dimension size
    */
-  inline void set(unsigned int i, unsigned int s) {
+  inline void set(unsigned int i, unsigned int s) 
+  {
     DYNET_ARG_CHECK(i < nd || s == 1, "Out of bounds exception in Dim::set(" << i << "," << s << ") for node of size " << nd);
     DYNET_ARG_CHECK(s != 0, "Attempt to set dimension size to zero in Dim::set(" << i << "," << s << ") for node of size " << nd);
     d[i] = s;
@@ -209,20 +219,20 @@ struct Dim {
    * \brief Remove one of the dimensions
    * \param i index of the dimension to be removed
    */
-  inline void delete_dim(unsigned int i) {
+  inline void delete_dim(unsigned int i) 
+  {
     DYNET_ARG_CHECK(i < nd, "Out of bounds exception in Dim::delete_dim(" << i << ") for node of size " << nd );
-    if(i == nd-1){
-      if(nd == 1){
+    if (i == nd-1) {
+      if(nd == 1)
         d[0] = 1;
-      }
-      else{
+      else
         --nd;
-      }
     }
-    else{
-      for(; i + 1 < nd; ++i){
+    else
+    {
+      for(; i + 1 < nd; ++i)
         d[i] = d[i + 1];
-      }
+
       --nd;
     }
   }
@@ -231,7 +241,8 @@ struct Dim {
    * \param dims dimensions to be removed
    * \param reduce_batch reduce the batch dimension or not
    */
-  inline void delete_dims(std::vector<unsigned int> dims, bool reduce_batch){
+  inline void delete_dims(std::vector<unsigned int> dims, bool reduce_batch)
+  {
     std::vector<bool> deleted_dims(nd, false);
 
     for(unsigned int i = 0; i < dims.size(); i++) {

@@ -8,25 +8,30 @@
 
 namespace dynet {
 
-class InternalMemoryPool {
+class InternalMemoryPool 
+{
  public:
-  explicit InternalMemoryPool(const std::string & name, size_t cap, MemAllocator* a) : name(name), a(a) {
+  explicit InternalMemoryPool(const std::string & name, size_t cap, MemAllocator* a) : name(name), a(a) 
+  {
     sys_alloc(cap);
     zero_all();
   }
 
-  ~InternalMemoryPool() {
+  ~InternalMemoryPool() 
+  {
       a->free(mem);
   }
 
   void* allocate(size_t n); 
 
-  void free() {
+  void free() 
+  {
     //std::cerr << "freeing " << used << " bytes\n";
     used = 0;
   }
   // zeros out the amount of allocations
-  void zero_allocated_memory() {
+  void zero_allocated_memory() 
+  {
     if (used == 0) return;
     a->zero(mem, used);
   }
@@ -35,17 +40,20 @@ class InternalMemoryPool {
  private:
   void sys_alloc(size_t cap);
 
-  void zero_all() {
+  void zero_all() 
+  {
     a->zero(mem, capacity);
   }
+
   std::string name;
   size_t capacity;
   MemAllocator* a;
   void* mem;
 };
 
-class AlignedMemoryPool {
-  public:
+class AlignedMemoryPool 
+{
+ public:
     explicit AlignedMemoryPool(const std::string &name, size_t initial_cap, MemAllocator *a, size_t expanding_unit = 1<<24);
     ~AlignedMemoryPool();
 

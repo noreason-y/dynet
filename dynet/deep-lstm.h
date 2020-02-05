@@ -9,18 +9,26 @@ namespace dynet {
 
 class ParameterCollection;
 
-struct DeepLSTMBuilder : public RNNBuilder {
+struct DeepLSTMBuilder : public RNNBuilder 
+{
   DeepLSTMBuilder() = default;
-  explicit DeepLSTMBuilder(unsigned layers,
-                           unsigned input_dim,
-                           unsigned hidden_dim,
-                           ParameterCollection& model);
+
+  explicit DeepLSTMBuilder(
+      unsigned layers, 
+      unsigned input_dim, 
+      unsigned hidden_dim, 
+      ParameterCollection& model);
 
   Expression back() const override { return h.back().back(); }
+
   std::vector<Expression> final_h() const override { return (h.size() == 0 ? h0 : h.back()); }
-  std::vector<Expression> final_s() const override {
+
+  std::vector<Expression> final_s() const override 
+  {
     std::vector<Expression> ret = (c.size() == 0 ? c0 : c.back());
-    for(auto my_h : final_h()) ret.push_back(my_h);
+    for(auto my_h : final_h()) 
+      ret.push_back(my_h);
+
     return ret;
   }
   /**
@@ -28,6 +36,7 @@ struct DeepLSTMBuilder : public RNNBuilder {
    * \return list of points to ParameterStorage object
    */
   ParameterCollection & get_parameter_collection() override;
+
  protected:
   void new_graph_impl(ComputationGraph& cg, bool update) override;
   void start_new_sequence_impl(const std::vector<Expression>& h0) override;

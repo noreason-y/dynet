@@ -12,7 +12,8 @@ using namespace std;
 
 namespace dynet {
 
-vector<Device*> initialize_gpu(DynetParams& params) {
+vector<Device*> initialize_gpu(DynetParams& params) 
+{
   // Get GPU devices count
   int nDevices;
   CUDA_CHECK(cudaGetDeviceCount(&nDevices));
@@ -29,14 +30,17 @@ vector<Device*> initialize_gpu(DynetParams& params) {
        <<driverVersion/1000<<"."<<(driverVersion%1000)/10<<endl;
 
   // Check gpu_mask
-  for (unsigned gpu_id = nDevices; gpu_id < MAX_GPUS; ++gpu_id) {
-    if (params.gpu_mask[gpu_id] != 0) {
+  for (unsigned gpu_id = nDevices; gpu_id < MAX_GPUS; ++gpu_id) 
+  {
+    if (params.gpu_mask[gpu_id] != 0) 
+    {
       ostringstream oss; oss << "You requested GPU id " << gpu_id << " but system only reports up to " << nDevices;
       throw std::invalid_argument(oss.str());
     }
   }
 
-  if (params.ngpus_requested || params.requested_gpus == -1) {
+  if (params.ngpus_requested || params.requested_gpus == -1) 
+  {
     if (params.requested_gpus == -1) params.requested_gpus = 1;
     cerr << "Request for " << params.requested_gpus << " GPU" << (params.requested_gpus == 1 ? "" : "s") << " ...\n";
     for (int i = 0; i < MAX_GPUS; ++i) params.gpu_mask[i] = 1;
@@ -87,7 +91,8 @@ vector<Device*> initialize_gpu(DynetParams& params) {
   stable_sort(gpus.begin(), gpus.end(), [&](int a, int b) -> bool { return gpu_free_mem[a] > gpu_free_mem[b]; });
   gpus.resize(params.requested_gpus);
   cerr << "[dynet] Device(s) selected:";
-  for (int i = 0; i < params.requested_gpus; ++i) {
+  for (int i = 0; i < params.requested_gpus; ++i) 
+  {
     cerr << ' ' << gpus[i];
     Device* d = new Device_GPU(gpudevices.size(), params.mem_descriptor,
                                gpus[i], params.random_seed);
