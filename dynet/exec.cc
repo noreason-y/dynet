@@ -46,7 +46,7 @@ void SimpleExecutionEngine::invalidate(unsigned i)
 }
 
 const Tensor& SimpleExecutionEngine::forward() 
-j{
+{
   const VariableIndex node_max_index = (VariableIndex)(cg.nodes.size() - 1);
   return forward(node_max_index);
 }

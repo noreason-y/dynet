@@ -14,6 +14,7 @@ namespace dynet {
 class Dict 
 {
  typedef std::unordered_map<std::string, int> Map;
+
  public:
   Dict() : frozen(false), map_unk(false), unk_id(-1) {}
 
@@ -27,7 +28,8 @@ class Dict
   void freeze() { frozen = true; }
   bool is_frozen() const { return frozen; }
 
-  inline int convert(const std::string& word) {
+  inline int convert(const std::string& word) 
+  {
     auto i = d_.find(word);
     if (i == d_.end()) 
     {
@@ -40,12 +42,15 @@ class Dict
       }
       words_.push_back(word);
       return d_[word] = (int)words_.size() - 1;
-    } else {
+    } 
+    else 
+    {
       return i->second;
     }
   }
   
-  inline const std::string& convert(const int& id) const {
+  inline const std::string& convert(const int& id) const 
+  {
     DYNET_ARG_CHECK(
         id < (int)words_.size(), "Out-of-bounds error in Dict::convert for word ID " 
         << id << " (dict size: " << words_.size() << ")");
@@ -53,7 +58,8 @@ class Dict
     return words_[id];
   }
   
-  void set_unk(const std::string& word) {
+  void set_unk(const std::string& word) 
+  {
     if (!frozen)
       DYNET_RUNTIME_ERR("Please call set_unk() only after dictionary is frozen");
     if (map_unk)
