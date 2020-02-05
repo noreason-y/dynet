@@ -12,13 +12,17 @@ namespace dynet {
 
 enum { X2Z, H2Z, BZ, X2R, H2R, BR, X2H, H2H, BH };
 
-GRUBuilder::GRUBuilder(unsigned layers,
-                       unsigned input_dim,
-                       unsigned hidden_dim,
-                       ParameterCollection& model) : hidden_dim(hidden_dim), layers(layers) {
+GRUBuilder::GRUBuilder(
+    unsigned layers, 
+    unsigned input_dim, 
+    unsigned hidden_dim, 
+    ParameterCollection& model) 
+    : hidden_dim(hidden_dim), layers(layers) 
+{
   unsigned layer_input_dim = input_dim;
   local_model = model.add_subcollection("gru-builder");
-  for (unsigned i = 0; i < layers; ++i) {
+  for (unsigned i = 0; i < layers; ++i) 
+  {
     // z
     Parameter p_x2z = local_model.add_parameters({hidden_dim, layer_input_dim});
     Parameter p_h2z = local_model.add_parameters({hidden_dim, hidden_dim});
@@ -42,9 +46,11 @@ GRUBuilder::GRUBuilder(unsigned layers,
   dropout_rate = 0.f;
 }
 
-void GRUBuilder::new_graph_impl(ComputationGraph& cg, bool update) {
+void GRUBuilder::new_graph_impl(ComputationGraph& cg, bool update) 
+{
   param_vars.clear();
-  for (unsigned i = 0; i < layers; ++i) {
+  for (unsigned i = 0; i < layers; ++i) 
+  {
     auto& p = params[i];
 
     // z
@@ -67,15 +73,18 @@ void GRUBuilder::new_graph_impl(ComputationGraph& cg, bool update) {
   }
 }
 
-void GRUBuilder::start_new_sequence_impl(const std::vector<Expression>& h_0) {
+void GRUBuilder::start_new_sequence_impl(const std::vector<Expression>& h_0) 
+{
   h.clear();
   h0 = h_0;
-  DYNET_ARG_CHECK(h0.empty() || h0.size() == layers,
-                          "Number of inputs passed to initialize GRUBuilder (" << h0.size() << ") "
-                          "is not equal to the number of layers (" << layers << ")");
+  DYNET_ARG_CHECK(
+      h0.empty() || h0.size() == layers, 
+      "Number of inputs passed to initialize GRUBuilder (" << h0.size() 
+      << ") " "is not equal to the number of layers (" << layers << ")");
 }
 
-Expression GRUBuilder::set_h_impl(int prev, const vector<Expression>& h_new) {
+Expression GRUBuilder::set_h_impl(int prev, const vector<Expression>& h_new) 
+{
   DYNET_ARG_CHECK(h_new.empty() || h_new.size() == layers,
                           "Number of inputs passed to RNNBuilder::set_h() (" << h_new.size() << ") "
                           "is not equal to the number of layers (" << layers << ")");

@@ -9,7 +9,8 @@ namespace dynet {
 namespace gpu {
 
 // CUDA kernel. Each thread takes care of one element of c
-__global__ void ker_dense_to_sparse_assign(int n, const unsigned int *idx, float *src, float *trg) {
+__global__ void ker_dense_to_sparse_assign(int n, const unsigned int *idx, float *src, float *trg) 
+{
   // Get our global thread ID
   int id = blockIdx.x*blockDim.x+threadIdx.x;
 
@@ -18,13 +19,18 @@ __global__ void ker_dense_to_sparse_assign(int n, const unsigned int *idx, float
     trg[idx[id]] = src[id];
 }
 
-void dense_to_sparse_assign(int n, const unsigned int *idx, float *src, float *trg) {
-  if(n > 0) {
+void dense_to_sparse_assign(int n, const unsigned int *idx, float *src, float *trg) 
+{
+  if(n > 0) 
+  {
     auto tb = SizeToBlockThreadPair(n);
     int total_size = tb.first*tb.second;
     for(int curr_pos = 0; curr_pos < n; curr_pos += total_size)
       ker_dense_to_sparse_assign<<<tb.first, tb.second>>>(
-          std::min(total_size, n-curr_pos), idx+curr_pos, src+curr_pos, trg);
+          std::min(total_size, n-curr_pos), 
+          idx+curr_pos, 
+          src+curr_pos, 
+          trg);
   }
 }
 
@@ -38,8 +44,10 @@ __global__ void ker_sparse_to_dense_assign(int n, const unsigned int *idx, float
     trg[id] = src[idx[id]];
 }
 
-void sparse_to_dense_assign(int n, const unsigned int *idx, float *src, float *trg) {
-  if(n > 0) {
+void sparse_to_dense_assign(int n, const unsigned int *idx, float *src, float *trg) 
+{
+  if(n > 0) 
+  {
     auto tb = SizeToBlockThreadPair(n);
     int total_size = tb.first*tb.second;
     for(int curr_pos = 0; curr_pos < n; curr_pos += total_size)
@@ -49,7 +57,8 @@ void sparse_to_dense_assign(int n, const unsigned int *idx, float *src, float *t
 }
 
 // CUDA kernel. Each thread takes care of one element of c
-__global__ void ker_dense_to_sparse_subtract(int n, const unsigned int *idx, float *src, float *trg) {
+__global__ void ker_dense_to_sparse_subtract(int n, const unsigned int *idx, float *src, float *trg) 
+{
   // Get our global thread ID
   int id = blockIdx.x*blockDim.x+threadIdx.x;
 

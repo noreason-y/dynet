@@ -12,7 +12,8 @@ using namespace std;
 
 namespace dynet {
 
-bool check_grad(ParameterCollection& m, Expression& expr, int verbosity) {
+bool check_grad(ParameterCollection& m, Expression& expr, int verbosity) 
+{
   ComputationGraph& g = *expr.pg;
   // Clear the parameters first
   const vector<shared_ptr<ParameterStorage>>& params = m.parameters_list();
@@ -29,13 +30,15 @@ bool check_grad(ParameterCollection& m, Expression& expr, int verbosity) {
 
   // Check
   bool flag = false, curr_flag = false;
-  for (auto pp : params) {
+  for (auto pp : params) 
+  {
     if(verbosity > 1)
       cerr << endl << "PARAMETERS " << pp << endl;
     ParameterStorage& p = *pp;
     if(p.g.v == nullptr) continue;
     size_t ts = p.dim.size();
-    for (size_t i = 0; i < ts; ++i) {
+    for (size_t i = 0; i < ts; ++i) 
+    {
       float old = TensorTools::access_element(p.values, i);
       TensorTools::set_element(p.values, i, old - alpha);
       float E_left = as_scalar(g.forward(expr));
@@ -47,8 +50,16 @@ bool check_grad(ParameterCollection& m, Expression& expr, int verbosity) {
       float f = fabs(g - g_act);
       float m = std::max(fabs(g), fabs(g_act));
       if (f > 0.01 && m > 0.f) f /= m;
-      if (f > 0.01 || std::isnan(f)) { flag = true; if(verbosity > 0) { curr_flag = true; cerr << "***[" << f << "] "; } }
-      if(verbosity + (curr_flag ? 1 : 0) > 1) {
+      if (f > 0.01 || std::isnan(f)) 
+      { 
+        flag = true; if(verbosity > 0) 
+        { 
+          curr_flag = true; cerr << "***[" << f << "] "; 
+        } 
+      }
+
+      if (verbosity + (curr_flag ? 1 : 0) > 1) 
+      {
         cerr << g_act << ' ' << g << endl;
         curr_flag = false;
       }
