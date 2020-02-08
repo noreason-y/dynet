@@ -177,13 +177,14 @@ if (WITH_CUDA_BACKEND)
 endif()
 
 # look for Eigen
+set(EIGEN3_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/local/include/eigen3)
 if (DEFINED ENV{EIGEN3_INCLUDE_DIR} AND NOT DEFINED EIGEN3_INCLUDE_DIR) # use env variable if not set
   set(EIGEN3_INCLUDE_DIR $ENV{EIGEN3_INCLUDE_DIR})
 endif()
 get_filename_component(EIGEN3_INCLUDE_DIR "${EIGEN3_INCLUDE_DIR}" REALPATH BASE_DIR "${CMAKE_BINARY_DIR}")
 set(EIGEN3_INCLUDE_DIR ${EIGEN3_INCLUDE_DIR} CACHE STRING "" FORCE)
 message("-- Eigen dir is " ${EIGEN3_INCLUDE_DIR})
-find_package(Eigen3 REQUIRED)
+# find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 
 FIND_PACKAGE(Threads REQUIRED)
@@ -193,13 +194,13 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake ${CMAKE_CURRENT_BINARY
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 add_subdirectory(dynet)
-# add_subdirectory(tutorial)
-# add_subdirectory(examples)
+add_subdirectory(tutorial)
+add_subdirectory(examples)
 
-if(ENABLE_CPP_EXAMPLES)
-  add_subdirectory(tutorial)
-  add_subdirectory(examples)
-endif(ENABLE_CPP_EXAMPLES)
+# if(ENABLE_CPP_EXAMPLES)
+#   add_subdirectory(tutorial)
+#   add_subdirectory(examples)
+# endif(ENABLE_CPP_EXAMPLES)
 
 if(PYTHON)
   add_subdirectory(python)
